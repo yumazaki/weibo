@@ -31,5 +31,7 @@ class SessionsController extends Controller
 
     public function destory()
     {
+        Auth::logout();
+        return redirect()->route('login');
     }
 }
