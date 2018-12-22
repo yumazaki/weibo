@@ -12,7 +12,7 @@ class UsersController extends Controller
     {
 
         $this->middleware('auth', [
-            'except' => ['show', 'create', 'store']
+            'except' => ['show', 'create', 'store', 'index']
         ]);
 
         $this->middleware('guest', [
@@ -22,7 +22,7 @@ class UsersController extends Controller
 
     public function index()
     {
-        $users = User::paginate(2);
+        $users = User::paginate(10);
         return view('users.index', compact('users'));
     }
     //
@@ -80,5 +80,13 @@ class UsersController extends Controller
 
         session()->flash('success', '您的资料更新成功');
         return redirect()->route('users.show', $user->id);
+    }
+
+    public function destroy(User $user)
+    {
+        $this->authorize('destroy', $user);
+        $user->delete();
+        session()->flash('success', '用户' . $user->name . '删除成功');
+        return back();
     }
 }
